@@ -7,12 +7,15 @@ public class ProtagonistScript : MonoBehaviour
 {
 
     private Rigidbody2D rb;
+    private Animator anim;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     // Update is called once per frame
@@ -25,9 +28,11 @@ public class ProtagonistScript : MonoBehaviour
 
     void DoJump()
     {
+
+        bool result = Helper.DoRayCollisionCheck(gameObject);
         Vector2 velocity = rb.velocity;
 
-        if (Input.GetKey("w") )
+        if (Input.GetKey("w") && (result == true) )
         {
             if (velocity.y < 0.01f)
             {
@@ -59,6 +64,16 @@ public class ProtagonistScript : MonoBehaviour
         {
             velocity.x = 5;
         }
+
+        if (velocity.x > 0 || velocity.x < 0)
+        {
+            anim.SetBool("Walk", true);
+        }
+        else
+        {
+            anim.SetBool("Walk", false);
+        }
+
 
         Helper.SetVelocity(velocity.x, velocity.y, gameObject);
 
